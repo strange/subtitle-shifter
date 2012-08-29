@@ -11,7 +11,7 @@ shiftTime n = map maybeShiftLine
     where maybeShiftLine l = case words l of
               [t1, "-->", t2] -> printf "%s --> %s" (shift t1) (shift t2)
               _ -> l
-          shift t = toTime $ (+n) $ toSeconds t :: String 
+          shift = toTime . (+n) . toSeconds :: String -> String 
 
 toTime seconds = printf "%02d:%02d:%02d,%03d" h m s us
     where (digits, index) = floatToDigits 10 seconds
@@ -22,7 +22,6 @@ toTime seconds = printf "%02d:%02d:%02d,%03d" h m s us
           listToInt [] = 0
           listToInt l  = read $ concatMap show l :: Integer
 
-toSeconds :: String -> Float
 toSeconds = sum . zipWith ($) ops . map read . splitOneOf ":,"
     where ops = [(*3600), (*60), id, (/1000)]
 
